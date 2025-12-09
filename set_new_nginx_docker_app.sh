@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ------------------------------
-# Script réutilisable Node.js LTS + pnpm + PM2 + Nginx + Certbot Cloudflare
+# Script réutilisable Node.js LTS + pnpm + Nginx + Certbot Cloudflare
 # Arguments :
 #   $1 = Domaine (ex: exemple.com)
 #   $2 = Port Node.js (ex: 3000)
@@ -61,14 +61,9 @@ else
     echo "pnpm déjà installé, skipping..."
 fi
 
-# Installer PM2 si absent
-if ! command -v pm2 &> /dev/null; then
-    sudo npm install -g pm2
-    pm2 startup systemd -u $USER --hp $HOME
-    pm2 save
-else
-    echo "PM2 déjà installé, skipping..."
-fi
+# Installer docker et docker-compose si absent
+install_if_missing docker docker.io
+install_if_missing docker-compose docker-compose
 
 # Installer Nginx si absent
 install_if_missing nginx nginx
